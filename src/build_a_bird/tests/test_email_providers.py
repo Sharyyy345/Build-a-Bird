@@ -30,3 +30,4 @@ class TestGmailProvider():
         send_errs = email_provider.send(email)
 
         assert len(send_errs) == 0
+        

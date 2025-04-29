@@ -1,0 +1,21 @@
+[project]
+name = "build-a-bird"
+version = "0.1.0"
+description = "Final project for COSC365 at IUP."
+authors = [
+    {name = "Shari Hoch"},
+    {name = "Noah Grattan"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask (>=3.1.0,<4.0.0)",
+    "diffusers[torch] (>=0.33.1,<0.34.0)",
+    "transformers (>=4.51.3,<5.0.0)",
+    "python-dotenv (>=1.1.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

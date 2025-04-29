@@ -19,7 +19,7 @@ def create_app():
     # store necessary configuration environment variables
     app.config['APP_EMAIL'] = os.getenv('APP_EMAIL', '')
     app.config['APP_EMAIL_PASSWORD'] = os.getenv('APP_EMAIL_PASSWORD', '')
-    app.config['DIFFUSERS_MODEL_ID'] = os.getenv('DIFFUSERS_MODEL_ID')
+    app.config['DIFFUSERS_MODEL_ID'] = os.getenv('DIFFUSERS_MODEL_ID', 'sd-legacy/stable-diffusion-v1-5') # use legacy stable diffusion v1-5 model by default
 
     @app.route('/')
     def index():

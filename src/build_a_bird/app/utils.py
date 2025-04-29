@@ -1,5 +1,6 @@
 import smtplib
 import torch
+from PIL.Image import Image
 from abc import ABC, abstractmethod
 from email.message import EmailMessage
 from diffusers import AutoPipelineForText2Image
@@ -135,7 +136,7 @@ class DiffusersText2ImgProvider():
 
         return pipeline, rand
 
-    def gen_img(self, input:Promptifiable, **inference_config):
+    def gen_img(self, input:Promptifiable, **inference_config) -> Image:
         '''
         Generate an image based on `input` text prompt
         '''

@@ -19,6 +19,7 @@ def create_app():
     # store necessary configuration environment variables
     app.config['APP_EMAIL'] = os.getenv('APP_EMAIL', '')
     app.config['APP_EMAIL_PASSWORD'] = os.getenv('APP_EMAIL_PASSWORD', '')
+    app.config['DIFFUSERS_MODEL_ID'] = os.getenv('DIFFUSERS_MODEL_ID')
 
     @app.route('/')
     def index():

@@ -18,7 +18,7 @@ def about():
     '''
     Gets info about current API implementation
 
-    Returns a JSON response
+    Returns a JSON response formatted based on `ApiResponse` object
     '''
 
     res = utils.ApiResponse()
@@ -32,7 +32,7 @@ def receipt():
     '''
     Sends an email receipt based on user's order data
 
-    Returns a JSON response
+    Returns a JSON response formatted based on `ApiResponse` object
     '''
 
     res = utils.ApiResponse()
@@ -83,7 +83,7 @@ def img():
     '''
     Generates an image of bird based on user's order data
 
-    Returns a JSON response
+    Returns a JSON response formatted based on `ApiResponse` object
     '''
 
     res = utils.ApiResponse()

@@ -37,10 +37,11 @@ class TestReceiptEndpoint():
         with app.test_client() as test_client:
             # TODO: base this off actual order inputs
             order_data = {
-                'email_addr': app.config['APP_EMAIL'],
-                'species': 'conure',
-                'color': 'red',
-                'personality': 'friendly',
+                'user_email': app.config['APP_EMAIL'],
+                'species': 'macaw',
+                'size': 'large',
+                'primary_feather_color': 'blue',
+                'secondary_feather_color': 'green',
                 }
             
             res = test_client.post('/api/receipt', json=order_data)
@@ -62,6 +63,7 @@ class TestImgEndpoint():
         with app.test_client() as test_client:
             # TODO: base this off actual order inputs
             order_data = {
+                'user_email': app.config['APP_EMAIL'],
                 'species': 'conure',
                 'size': 'small',
                 'primary_feather_color': 'red',
@@ -75,5 +77,5 @@ class TestImgEndpoint():
             assert res.status_code == 200
 
             # ensure our encoding actually worked and didn't mess up the image
-            img = Image.open(BytesIO(base64.b64decode(res.json['img'])))
+            img = Image.open(BytesIO(base64.b64decode(res.json['data'])))
             img.save('b64_bird.jpg')

@@ -3,18 +3,46 @@ import torch
 from PIL.Image import Image
 from abc import ABC, abstractmethod
 from email.message import EmailMessage
+from marshmallow import Schema, fields, validate, ValidationError
 from diffusers import AutoPipelineForText2Image
+from typing import Any
 
-class Promptifiable(ABC):
+class ApiResponse():
     '''
-    Object that can be converted to a text prompt for downstream processing
+    Represents a response from the Flask app's API endpoints
+    '''
+
+    def __init__(self, success:bool=True, data:Any='', errors:list[Exception|str]=[], status_code:int=200):
+        self.success = success
+        self.data = data
+        self.errors = errors
+        self.status_code = status_code
+
+    def to_json(self):
+        return {'success': self.success, 'data': self.data, 'errors': [str(e) for e in self.errors]}
+
+class Entity(ABC):
+    '''
+    Represents a domain-related object
     '''
 
     @abstractmethod
-    def to_prompt(self, *args, **kwargs) -> str:
+    def from_json(self, json:dict) -> tuple[bool,Exception|None]:
+        '''
+        Populates object's fields from JSON data
+
+        Returns tuple of form `(success,error)`
+        '''
         pass
 
-class BirdOrder(Promptifiable):
+    @abstractmethod
+    def to_prompt(self, *args, **kwargs) -> str:
+        '''
+        Converts object to a text prompt for downstream processing
+        '''
+        pass
+
+class BirdOrder(Entity):
     '''
     Represents an order for a bird through the app
     '''
@@ -25,11 +53,29 @@ class BirdOrder(Promptifiable):
     SIZES = set(['small','medium','large'])
     COLORS = set(['red','green','blue'])
 
-    def __init__(self, species:str='conure', size:str='small', primary_feather_color:str='green', secondary_feather_color:str='red'):
+    def __init__(self, user_name:str='Guest', user_email:str='', species:str='conure', size:str='small', primary_feather_color:str='green', secondary_feather_color:str='red'):
+        self.user_name = user_name
+        self.user_email = user_email
         self.species = species.lower()
         self.size = size.lower()
         self.primary_feather_color = primary_feather_color.lower()
         self.secondary_feather_color = secondary_feather_color.lower()
+
+    @property
+    def user_name(self):
+        return self._user_name
+    
+    @user_name.setter
+    def user_name(self, name:str):
+        self._user_name = name
+
+    @property
+    def user_email(self):
+        return self._user_email
+    
+    @user_email.setter
+    def user_email(self, email_addr:str):
+        self._user_email = email_addr
 
     @property
     def species(self):
@@ -71,8 +117,28 @@ class BirdOrder(Promptifiable):
             raise ValueError(f'Secondary feather color must be one of {self.COLORS}')
         self._secondary_feather_color = color
 
+    def from_json(self, json):
+        try:
+            data = BirdOrderSchema(unknown='exclude').load(json)
+            for attr, val in data.items():
+                setattr(self, attr, val)
+            return (True,None)
+        except ValidationError as ve:
+            return (False,ve)
+
     def to_prompt(self, *args, **kwargs):
         return f'A {self.size} {self.species} with {self.primary_feather_color} and {self.secondary_feather_color} feathers in a white room'
+    
+    def __str__(self):
+        return f'Order Details:\nSpecies: {self.species}\nSize: {self.size}\nFeather Colors (primary, secondary): {self.primary_feather_color}, {self.secondary_feather_color}'
+    
+class BirdOrderSchema(Schema):
+    user_name = fields.Str(required=False, load_default='Guest', dump_default='Guest')
+    user_email = fields.Str(required=True)
+    species = fields.Str(validate=validate.OneOf(BirdOrder.SPECIES), required=True)
+    size = fields.Str(validate=validate.OneOf(BirdOrder.SIZES), required=True)
+    primary_feather_color = fields.Str(validate=validate.OneOf(BirdOrder.COLORS), required=True)
+    secondary_feather_color = fields.Str(validate=validate.OneOf(BirdOrder.COLORS), required=True)
 
 class GmailProvider():
     '''
@@ -136,7 +202,7 @@ class DiffusersText2ImgProvider():
 
         return pipeline, rand
 
-    def gen_img(self, input:Promptifiable, **inference_config) -> Image:
+    def gen_img(self, input:Entity, **inference_config) -> Image:
         '''
         Generate an image based on `input` text prompt
         '''

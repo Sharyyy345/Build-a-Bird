@@ -21,63 +21,93 @@ def about():
     Returns a JSON response
     '''
 
-    return {'version': API_VERSION}
+    res = utils.ApiResponse()
+
+    res.data = {'version': API_VERSION}
+
+    return res.to_json(), res.status_code
 
 @bp.route('/receipt', methods=['POST'])
 def receipt():
     '''
     Sends an email receipt based on user's order data
 
-    Returns a JSON response of the form `{"success": bool, "errors": [str]}`
-    indicating whether email was sent
+    Returns a JSON response
     '''
+
+    res = utils.ApiResponse()
 
     order_data = None
     try:
         order_data = request.json
     except Exception as e:
-        return {'success': False, 'errors': [str(e)]}, 400
-    
-    # TODO: validate json data according to order inputs (tbd)
+        res.success = False
+        res.errors = [e]
+        res.status_code = 400
 
-    success = True
-    errors = []
+        return res.to_json(), res.status_code
+        
+    order = utils.BirdOrder()
+    loaded = order.from_json(order_data) # validate input json data
+
+    if not loaded[0]:
+        # order json data is invalid in some way
+        res.success = False
+        res.errors = [loaded[1]]
+        res.status_code = 400
+
+        return res.to_json(), res.status_code
 
     email_provider = utils.GmailProvider(current_app.config['APP_EMAIL'], current_app.config['APP_EMAIL_PASSWORD'])
 
+    # construct email
     email = EmailMessage()
     email['Subject'] = f'Build-a-Bird Receipt {datetime.now(tz=timezone.utc)}'
     email['From'] = email_provider.from_addr
-    email['To'] = order_data['email_addr']
-    email.set_content(str(order_data)) # TODO: write a better message
+    email['To'] = order.user_email
+    content = f'Hi {order.user_name},\n\nThanks for buying a feathered friend from Build-a-Bird! Your receipt is below.\n\n{str(order)}'
+    email.set_content(content)
 
     errors = email_provider.send(email)
-    success = len(errors) == 0
+    if len(errors) != 0:
+        res.success = False
+        res.errors = [f'Send failed for {addr} with error {error}' for addr, error in errors.items()]
+        res.status_code = 400
 
-    return {'success': success, 'errors': [f'{addr} = {error}' for addr, error in errors.items()]}
+    res.data = content
+
+    return res.to_json(), res.status_code
 
 @bp.route('/img', methods=['POST'])
 def img():
     '''
     Generates an image of bird based on user's order data
 
-    Returns a JSON response of the form `{"success": bool, "img": base64(bytes), "errors": [str]}`
+    Returns a JSON response
     '''
+
+    res = utils.ApiResponse()
 
     order_data = None
     try:
         order_data = request.json
     except Exception as e:
-        return {'success': False, 'img': '', 'errors': [str(e)]}, 400
-    
-    # TODO: validate json data according to order inputs (tbd)
+        res.success = False
+        res.errors = [str(e)]
+        res.status_code = 400
 
-    order = utils.BirdOrder(
-        species=order_data['species'],
-        size=order_data['size'],
-        primary_feather_color=order_data['primary_feather_color'],
-        secondary_feather_color=order_data['secondary_feather_color'],
-        )
+        return res.to_json(), res.status_code
+    
+    order = utils.BirdOrder()
+    loaded = order.from_json(order_data) # validate input json data
+
+    if not loaded[0]:
+        # order json data is invalid in some way
+        res.success = False
+        res.errors = [loaded[1]]
+        res.status_code = 400
+
+        return res.to_json(), res.status_code
     
     img_provider = utils.DiffusersText2ImgProvider(current_app.config['DIFFUSERS_MODEL_ID'], use_gpu=True)
 
@@ -89,4 +119,6 @@ def img():
     img.save(buffer, format='JPEG')
     img_data = buffer.getvalue()
 
-    return {'success': True, 'img': base64.b64encode(img_data).decode(encoding='utf-8'), 'errors': []}
+    res.data = base64.b64encode(img_data).decode(encoding='utf-8')
+
+    return res.to_json(), res.status_code

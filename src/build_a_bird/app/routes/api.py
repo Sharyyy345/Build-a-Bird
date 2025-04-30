@@ -6,7 +6,7 @@ import base64
 from datetime import datetime, timezone
 from email.message import EmailMessage
 from flask import Blueprint, request, current_app
-from build_a_bird.app import utils
+from build_a_bird.app import utils, entities
 from io import BytesIO
 
 API_VERSION = 1
@@ -47,7 +47,7 @@ def receipt():
 
         return res.to_json(), res.status_code
         
-    order = utils.BirdOrder()
+    order = entities.BirdOrder()
     loaded = order.from_json(order_data) # validate input json data
 
     if not loaded[0]:
@@ -98,7 +98,7 @@ def img():
 
         return res.to_json(), res.status_code
     
-    order = utils.BirdOrder()
+    order = entities.BirdOrder()
     loaded = order.from_json(order_data) # validate input json data
 
     if not loaded[0]:

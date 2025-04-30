@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from build_a_bird.app import utils
+from build_a_bird.app import utils, entities
 
 load_dotenv()
 
@@ -10,7 +10,7 @@ class TestDiffusersText2ImgProvider():
     '''
 
     def test_gen_img(self):
-        order = utils.BirdOrder(
+        order = entities.BirdOrder(
             species='conure', 
             size='small', 
             primary_feather_color='green', 

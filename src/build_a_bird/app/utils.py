@@ -62,12 +62,12 @@ class GmailProvider():
 
 class DiffusersText2ImgProvider():
     '''
-    Mechanism for converting a `Promptifiable` object into a text prompt
+    Mechanism for converting an `Entity` into a text prompt
     suitable for processing by a text-to-image AI model
     as provided by `diffusers`
     '''
 
-    def __init__(self, diffusers_model_id:str, torch_dtype:torch.dtype=torch.float16, use_gpu=True, seed:int=123):
+    def __init__(self, diffusers_model_id:str, torch_dtype:torch.dtype=torch.float16, use_gpu=True, seed:int|None=None):
         self.diffusers_model_id = diffusers_model_id
         self.torch_dtype = torch_dtype
         self.device = 'cuda' if use_gpu else 'cpu'
@@ -75,7 +75,9 @@ class DiffusersText2ImgProvider():
         self.pipeline, self.rand = self._build_pipeline()
 
     def _build_pipeline(self):
-        rand = torch.manual_seed(self.seed)
+        rand = None
+        if self.seed is not None:
+            rand = torch.manual_seed(self.seed)
 
         pipeline = AutoPipelineForText2Image.from_pretrained(self.diffusers_model_id, torch_dtype=self.torch_dtype)
         pipeline.to(self.device)
@@ -88,6 +90,7 @@ class DiffusersText2ImgProvider():
         '''
 
         inference_config['num_images_per_prompt'] = 1 # only ever want to generate 1 image
+        inference_config['generator'] = self.rand # use our own random generator
 
         imgs = self.pipeline(prompt=input.to_prompt(), **inference_config).images
 

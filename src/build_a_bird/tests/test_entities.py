@@ -11,6 +11,7 @@ class TestBirdOrderEntity():
     def test_from_valid_json(self):
         order_json = {
             'user_email': 'foo@bar.com',
+            'sex': 'male',
             'species': 'conure', 
             'size': 'small', 
             'primary_feather_color': 'red', 
@@ -27,6 +28,7 @@ class TestBirdOrderEntity():
     def test_from_json_missing_required(self):
         order_json = {
             # missing user email address
+            'sex': 'female',
             'species': 'conure',
             'size': 'small', 
             'primary_feather_color': 'red', 
@@ -43,6 +45,7 @@ class TestBirdOrderEntity():
     def test_from_json_invalid_val(self):
         order_json = {
             'user_email': 'foo@bar.com',
+            'sex': 'female',
             'species': 'dog',
             'size': 'small', 
             'primary_feather_color': 'red', 

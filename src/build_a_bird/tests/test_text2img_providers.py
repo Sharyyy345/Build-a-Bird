@@ -20,8 +20,8 @@ class TestDiffusersText2ImgProvider():
         img_provider = utils.DiffusersText2ImgProvider(
             os.getenv('DIFFUSERS_MODEL_ID'),
             use_gpu=True,
-            seed=777,
             )
         
         img = img_provider.gen_img(order)
+        img.save('bird.jpg')
                 

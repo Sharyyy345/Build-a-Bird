@@ -27,7 +27,10 @@ class BirdOrder(Entity):
     Represents an order for a bird through the app
     '''
 
-    # TODO: revise this all
+    SEXES = {
+        'male': 25.0,
+        'female': 25.0,
+    }
 
     SPECIES = {
         'parakeet': 100.0,
@@ -48,9 +51,22 @@ class BirdOrder(Entity):
         'green': 10.0,
     }
 
-    def __init__(self, user_name:str='Guest', user_email:str='', species:str='conure', size:str='small', primary_feather_color:str='red', secondary_feather_color:str='red'):
+    def __init__(
+            self, 
+            user_name:str='Guest', 
+            user_email:str='',
+            sex:str='male',
+            species:str='conure', 
+            size:str='small', 
+            primary_feather_color:str='red', 
+            secondary_feather_color:str='red',
+            ):
+        # user info
         self.user_name = user_name
         self.user_email = user_email
+
+        # bird info
+        self.sex = sex
         self.species = species.lower()
         self.size = size.lower()
         self.primary_feather_color = primary_feather_color.lower()
@@ -71,6 +87,16 @@ class BirdOrder(Entity):
     @user_email.setter
     def user_email(self, email_addr:str):
         self._user_email = email_addr
+
+    @property
+    def sex(self):
+        return self._sex
+    
+    @sex.setter
+    def sex(self, sex:str):
+        if sex not in self.SEXES:
+            raise ValueError(f'Sex must be one of {self.SEXES}')
+        self._sex = sex
 
     @property
     def species(self):
@@ -122,30 +148,35 @@ class BirdOrder(Entity):
             return (False,ve)
 
     def to_prompt(self, *args, **kwargs):
-        return f'A {self.size} {self.species} with {self.primary_feather_color} and {self.secondary_feather_color} feathers in a white room'
+        return f'A highly detailed realistic {self.size} {self.sex} {self.species} with {self.primary_feather_color} and {self.secondary_feather_color} feathers in a white room with studio lighting'
     
     def __str__(self):
         res = f'Order Details:\n'
 
-        cost = self.SPECIES[self.species]
-        res += f'Species: {self.species} (+${self.SPECIES[self.species]})\n'
+        cost = self.SEXES[self.sex]
+        res += f'Sex: {self.sex} (+${self.SEXES[self.sex]:,.2f})\n'
+
+        cost += self.SPECIES[self.species]
+        res += f'Species: {self.species} (+${self.SPECIES[self.species]:,.2f})\n'
 
         cost += self.SIZES[self.size]
-        res += f'Size: {self.size} (+${self.SIZES[self.size]})\n'
+        res += f'Size: {self.size} (+${self.SIZES[self.size]:,.2f})\n'
 
         cost += self.COLORS[self.primary_feather_color]
-        res += f'Primary Feather Color: {self.primary_feather_color} (+{self.COLORS[self.primary_feather_color]})\n'
+        res += f'Primary Feather Color: {self.primary_feather_color} (+{self.COLORS[self.primary_feather_color]:,.2f})\n'
 
         cost += 0.0 if self.secondary_feather_color == self.primary_feather_color else self.COLORS[self.secondary_feather_color]
-        res += f'Secondary Feather Color: {self.secondary_feather_color} (+{0.0 if self.secondary_feather_color == self.primary_feather_color else self.COLORS[self.secondary_feather_color]})\n'
+        res += f'Secondary Feather Color: {self.secondary_feather_color} (+{0.00 if self.secondary_feather_color == self.primary_feather_color else self.COLORS[self.secondary_feather_color]:,.2f})\n'
     
-        res += f'Total: ${cost}'
+        res += f'Total: ${cost:,.2f}'
         
         return res
     
 class BirdOrderSchema(Schema):
     user_name = fields.Str(required=False, load_default='Guest', dump_default='Guest')
     user_email = fields.Str(required=True)
+
+    sex = fields.Str(validate=validate.OneOf(BirdOrder.SEXES), required=True)
     species = fields.Str(validate=validate.OneOf(BirdOrder.SPECIES), required=True)
     size = fields.Str(validate=validate.OneOf(BirdOrder.SIZES), required=True)
     primary_feather_color = fields.Str(validate=validate.OneOf(BirdOrder.COLORS), required=True)

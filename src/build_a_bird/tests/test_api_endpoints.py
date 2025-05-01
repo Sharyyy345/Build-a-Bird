@@ -35,9 +35,9 @@ class TestReceiptEndpoint():
         app.testing = True
 
         with app.test_client() as test_client:
-            # TODO: base this off actual order inputs
             order_data = {
                 'user_email': app.config['APP_EMAIL'],
+                'sex': 'male',
                 'species': 'macaw',
                 'size': 'large',
                 'primary_feather_color': 'blue',
@@ -64,10 +64,11 @@ class TestImgEndpoint():
             # TODO: base this off actual order inputs
             order_data = {
                 'user_email': app.config['APP_EMAIL'],
-                'species': 'conure',
-                'size': 'small',
+                'sex': 'female',
+                'species': 'macaw',
+                'size': 'medium',
                 'primary_feather_color': 'red',
-                'secondary_feather_color': 'green',
+                'secondary_feather_color': 'blue',
             }
 
             res = test_client.post('/api/img', json=order_data)

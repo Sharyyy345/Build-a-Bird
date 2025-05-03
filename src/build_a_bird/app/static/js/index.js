@@ -119,20 +119,30 @@ function bird()
             price = price + 10.0
         }
 /*------------------------------------------------------------------------------*/
-    if(document.getElementById('Secondary').value == "Red") 
+    if(document.getElementById('Secondary').value == document.getElementById('Primary').value) 
         {
-            price = price + 10.0
+            price = price + 0.0
         }
 
-    else if(document.getElementById('Secondary').value == "Blue") 
+    else
         {
-            price = price + 10.0
-        }
 
-    else if(document.getElementById('Secondary').value == "Green") 
-        {
-            price = price + 10.0
-        }  
+        if(document.getElementById('Secondary').value == "Red") 
+            {
+                price = price + 10.0
+            }
+    
+        else if(document.getElementById('Secondary').value == "Blue") 
+            {
+                price = price + 10.0
+            }
+
+        else if(document.getElementById('Secondary').value == "Green") 
+            {
+                price = price + 10.0
+            }  
+
+        }
     
     var totalPrice = document.getElementById('Price');
     totalPrice.innerText = "Total: $" + price.toFixed(2)

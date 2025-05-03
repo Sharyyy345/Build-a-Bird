@@ -14,28 +14,28 @@ function init()
 
     bird();
 
-    genderMale = document.getElementById('Male');
+    var genderMale = document.getElementById('Male');
     genderMale.onclick = bird;
 
-    genderFemale = document.getElementById('Female');
+    var genderFemale = document.getElementById('Female');
     genderFemale.onclick = bird;
 
-    species = document.getElementById('Species');
+    var species = document.getElementById('Species');
     species.onchange = bird;
 
-    sizeSmall = document.getElementById('Small');
+    var sizeSmall = document.getElementById('Small');
     sizeSmall.onclick = bird;
 
-    sizeMedium = document.getElementById('Medium');
+    var sizeMedium = document.getElementById('Medium');
     sizeMedium.onclick = bird;
 
-    sizeLarge = document.getElementById('Large');
+    var sizeLarge = document.getElementById('Large');
     sizeLarge.onclick = bird;
 
-    primaryColor = document.getElementById('Primary');
+    var primaryColor = document.getElementById('Primary');
     primaryColor.onchange = bird;
 
-    secondaryColor = document.getElementById('Secondary');
+    var secondaryColor = document.getElementById('Secondary');
     secondaryColor.onchange = bird;
 
     document.getElementById('Submit').onclick = submitfunction;
@@ -54,14 +54,14 @@ function submitfunction()
  */
 function bird() 
 {
-    price = 0;
+    var price = 0;
 
     if(document.getElementById('Male').checked == true) 
         {
             price = price + 25.0
         }
     
-    elseif(document.getElementById('Female').checked == true) 
+    else if(document.getElementById('Female').checked == true) 
         {
             price = price + 25.0
         }
@@ -73,17 +73,17 @@ function bird()
             price = price + 100.0
         }
 
-    elseif(document.getElementById('Species').value == "Conure") 
+    else if(document.getElementById('Species').value == "Conure") 
         {
             price = price + 1000.0
         }
 
-    elseif(document.getElementById('Species').value == "Cockatoo") 
+    else if(document.getElementById('Species').value == "Cockatoo") 
         {
             price = price + 3500.0
         }
 
-    elseif(document.getElementById('Species').value == "Macaw") 
+    else if(document.getElementById('Species').value == "Macaw") 
         {
             price = price + 4000.0
         }
@@ -94,12 +94,12 @@ function bird()
             price = price + 50.0
         }
 
-    elseif(document.getElementById('Medium').checked == true) 
+    else if(document.getElementById('Medium').checked == true) 
         {
             price = price + 75.0
         }
 
-    elseif(document.getElementById('Large').checked == true) 
+    else if(document.getElementById('Large').checked == true) 
         {
             price = price + 100.0
         }
@@ -109,12 +109,12 @@ function bird()
             price = price + 10.0
         }
     
-    elseif(document.getElementById('Primary').value == "Blue") 
+    else if(document.getElementById('Primary').value == "Blue") 
         { 
             price = price + 10.0  
         }
     
-    elseif(document.getElementById('Primary').value == "Green") 
+    else if(document.getElementById('Primary').value == "Green") 
         {
             price = price + 10.0
         }
@@ -124,12 +124,12 @@ function bird()
             price = price + 10.0
         }
 
-    elseif(document.getElementById('Secondary').value == "Blue") 
+    else if(document.getElementById('Secondary').value == "Blue") 
         {
             price = price + 10.0
         }
 
-    elseif(document.getElementById('Secondary').value == "Green") 
+    else if(document.getElementById('Secondary').value == "Green") 
         {
             price = price + 10.0
         }  

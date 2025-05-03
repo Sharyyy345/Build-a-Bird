@@ -35,8 +35,8 @@ class BirdOrder(Entity):
     SPECIES = {
         'parakeet': 100.0,
         'conure': 1000.0,
-        'macaw': 3500.0,
-        'cockatoo': 4000.0,
+        'cockatoo': 3500.0,
+        'macaw': 4000.0,
     }
 
     SIZES = {

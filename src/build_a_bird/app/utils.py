@@ -67,8 +67,9 @@ class DiffusersText2ImgProvider():
     as provided by `diffusers`
     '''
 
-    def __init__(self, diffusers_model_id:str, torch_dtype:torch.dtype=torch.float16, use_gpu=True, seed:int|None=None):
+    def __init__(self, diffusers_model_id:str, img_size:int=128, torch_dtype:torch.dtype=torch.float16, use_gpu=True, seed:int|None=None):
         self.diffusers_model_id = diffusers_model_id
+        self.img_size = img_size
         self.torch_dtype = torch_dtype
         self.device = 'cuda' if use_gpu else 'cpu'
         self.seed = seed
@@ -94,4 +95,4 @@ class DiffusersText2ImgProvider():
 
         imgs = self.pipeline(prompt=input.to_prompt(), **inference_config).images
 
-        return imgs[0]
+        return imgs[0].resize((self.img_size,self.img_size))

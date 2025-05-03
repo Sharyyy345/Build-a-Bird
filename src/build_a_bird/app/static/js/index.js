@@ -38,13 +38,8 @@ function init()
     var secondaryColor = document.getElementById('Secondary');
     secondaryColor.onchange = bird;
 
-    document.getElementById('Submit').onclick = submitfunction;
+    document.getElementById('Submit').onclick = callSendEmailReceipt;
 
-}
-
-function submitfunction() 
-{
-    callSendEmailReceipt;
 }
 
 /**
@@ -156,6 +151,30 @@ function bird()
  */
 function sendEmailReceiptCallback() 
 {
+    if(this.readyState == 4 && this.status == 200)
+    {
+        // server sent response
+        // and our request was successful
+
+        console.log('successfully sent email!');
+
+        var response = document.getElementById("RequestResponse");
+
+        response.innerHTML = "Successfully sent email!";
+
+    }
+    else if(this.readyState == 4 && this.status != 400)
+    {
+        // server sent response
+        // and our request was unsuccessful
+
+        console.log('failed to send email');
+
+        var response = document.getElementById("RequestResponse");
+
+        response.innerHTML = "Email not sent. Please try again...";
+
+    }
 
 }
 
@@ -163,10 +182,58 @@ function sendEmailReceiptCallback()
  * Calls the `sendEmailReceipt` asynchronous function
  * with user's order data and establishes a callback to process JSON response
  */
-function callSendEmailReceipt() 
+function callSendEmailReceipt()
 {
+    var gender = null;
+    var species = null;
+    var size = null;
+    var primaryColor = null;
+    var secondaryColor = null;
 
+
+    if(document.getElementById('Male').checked == true)
+    {
+        gender = document.getElementById('Male').value.toLowerCase()
+    }
+
+    else if(document.getElementById('Female').checked == true)
+    {
+        gender = document.getElementById('Female').value.toLowerCase()
+    }
+    
+    species = document.getElementById('Species').value.toLowerCase()
+
+
+    if(document.getElementById('Small').checked == true)
+    {
+        size = document.getElementById('Small').value.toLowerCase()
+    }
+    
+    else if(document.getElementById('Medium').checked == true)
+    {
+        size = document.getElementById('Medium').value.toLowerCase()
+    }
+
+    else if(document.getElementById('Large').checked == true)
+    {
+        size = document.getElementById('Large').value.toLowerCase()
+    }
+
+    primaryColor = document.getElementById('Primary').value.toLowerCase()
+
+    secondaryColor = document.getElementById('Secondary').value.toLowerCase()
+
+    var name = document.getElementById("Name").value.toLowerCase()
+
+    var email = document.getElementById("Email").value.toLowerCase()
+
+    var data = {sex : gender, species : species, size: size, primary_feather_color : primaryColor, secondary_feather_color: secondaryColor, user_name : name, user_email : email} // input json order data
+    console.log(data);
+
+    sendEmailReceipt(sendEmailReceiptCallback, data);
 }
+
+
 
 /**
  * Processes JSON response of call to asynchronous `generateBirdImg` function

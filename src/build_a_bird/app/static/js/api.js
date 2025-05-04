@@ -16,6 +16,18 @@ const API_IMG_ENDPOINT = '/api/img'
  */
 function sendEmailReceipt(callback, orderData) {
 
+    var request = new XMLHttpRequest(); // creating new http request object
+
+    request.onreadystatechange = callback; // when request's state is changed, call this function
+
+    request.responseType = 'json'; // indicate we expect json data from the server
+
+    request.open('POST', API_RECEIPT_ENDPOINT); // sets request type and destination attributes
+
+    request.setRequestHeader('Content-Type', 'application/json'); // tells server data enclosed within will be of json type
+
+    request.send(JSON.stringify(orderData));
+
 }
 
 /**
@@ -28,6 +40,18 @@ function sendEmailReceipt(callback, orderData) {
  * @param {Object} orderData 
  */
 function generateBirdImg(callback, orderData) {
+
+    var request = new XMLHttpRequest(); // creating new http request object
+
+    request.onreadystatechange = callback; // when request's state is changed, call this function
+
+    request.responseType = 'json'; // indicate we expect json data from the server
+
+    request.open('POST', API_IMG_ENDPOINT); // sets request type and destination attributes
+
+    request.setRequestHeader('Content-Type', 'application/json'); // tells server data enclosed within will be of json type
+
+    request.send(JSON.stringify(orderData));
 
 }
 

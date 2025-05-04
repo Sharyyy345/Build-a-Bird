@@ -6,6 +6,12 @@ from diffusers import AutoPipelineForText2Image
 from typing import Any
 from build_a_bird.app import entities
 
+TORCH_DTYPES = {
+    'bfloat16': torch.bfloat16,
+    'float16': torch.float16,
+    'float32': torch.float32,
+}
+
 class ApiResponse():
     '''
     Represents a response from the Flask app's API endpoints
@@ -67,7 +73,7 @@ class DiffusersText2ImgProvider():
     as provided by `diffusers`
     '''
 
-    def __init__(self, diffusers_model_id:str, img_size:int=128, torch_dtype:torch.dtype=torch.float16, device:str='cpu', seed:int|None=None):
+    def __init__(self, diffusers_model_id:str, img_size:int=128, torch_dtype:torch.dtype=torch.bfloat16, device:str='cpu', seed:int|None=None):
         self.diffusers_model_id = diffusers_model_id
         self.img_size = img_size
         self.torch_dtype = torch_dtype

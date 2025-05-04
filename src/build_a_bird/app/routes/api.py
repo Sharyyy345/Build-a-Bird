@@ -114,9 +114,11 @@ def img():
 
         return res.to_json(), res.status_code
     
+    model_dtype = 'bfloat16' if current_app.config['MODEL_DTYPE'] not in utils.TORCH_DTYPES else utils.TORCH_DTYPES[current_app.config['MODEL_DTYPE']]
     img_provider = utils.DiffusersText2ImgProvider(
         current_app.config['DIFFUSERS_MODEL_ID'], 
         img_size=current_app.config['IMG_SIZE'],
+        torch_dtype=model_dtype,
         device=current_app.config['MODEL_DEVICE'],
     )
 

@@ -68,12 +68,17 @@ def receipt():
     content = f'Hi {order.user_name},\n\nThanks for buying a feathered friend from Build-a-Bird! Your receipt is below.\n\n{str(order)}'
     email.set_content(content)
 
-    errors = email_provider.send(email)
-    if len(errors) != 0:
+    try:
+        errors = email_provider.send(email)
+        if len(errors) != 0:
+            res.success = False
+            res.errors = [f'Send failed for {addr} with error {error}' for addr, error in errors.items()]
+            res.status_code = 400
+    except Exception as e:
         res.success = False
-        res.errors = [f'Send failed for {addr} with error {error}' for addr, error in errors.items()]
+        res.errors = [str(e)]
         res.status_code = 400
-
+        
     res.data = content
 
     return res.to_json(), res.status_code

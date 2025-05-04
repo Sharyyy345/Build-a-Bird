@@ -57,7 +57,7 @@ class GmailProvider():
 
         smtp_conn = self._connect()
         send_errs = smtp_conn.sendmail(self.from_addr, email['To'], email.as_string())
-        smtp_conn.quit()
+        _ = smtp_conn.quit()
         return send_errs
 
 class DiffusersText2ImgProvider():

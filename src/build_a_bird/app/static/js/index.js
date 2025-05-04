@@ -165,7 +165,7 @@ function sendEmailReceiptCallback()
         response.innerHTML = "Successfully sent email!";
 
     }
-    else if(this.readyState == 4 && this.status != 400)
+    else if(this.readyState == 4 && this.status != 200)
     {
         // server sent response
         // and our request was unsuccessful

@@ -67,11 +67,11 @@ class DiffusersText2ImgProvider():
     as provided by `diffusers`
     '''
 
-    def __init__(self, diffusers_model_id:str, img_size:int=128, torch_dtype:torch.dtype=torch.float16, use_gpu=True, seed:int|None=None):
+    def __init__(self, diffusers_model_id:str, img_size:int=128, torch_dtype:torch.dtype=torch.float16, device:str='cpu', seed:int|None=None):
         self.diffusers_model_id = diffusers_model_id
         self.img_size = img_size
         self.torch_dtype = torch_dtype
-        self.device = 'cuda' if use_gpu else 'cpu'
+        self.device = device
         self.seed = seed
         self.pipeline, self.rand = self._build_pipeline()
 

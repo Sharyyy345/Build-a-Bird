@@ -109,7 +109,11 @@ def img():
 
         return res.to_json(), res.status_code
     
-    img_provider = utils.DiffusersText2ImgProvider(current_app.config['DIFFUSERS_MODEL_ID'], use_gpu=True)
+    img_provider = utils.DiffusersText2ImgProvider(
+        current_app.config['DIFFUSERS_MODEL_ID'], 
+        img_size=current_app.config['IMG_SIZE'],
+        device=current_app.config['MODEL_DEVICE'],
+    )
 
     img = img_provider.gen_img(order)
 

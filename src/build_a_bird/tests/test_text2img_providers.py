@@ -19,7 +19,8 @@ class TestDiffusersText2ImgProvider():
         
         img_provider = utils.DiffusersText2ImgProvider(
             os.getenv('DIFFUSERS_MODEL_ID'),
-            use_gpu=True,
+            img_size=int(os.getenv('IMG_SIZE', 128)),
+            device=os.getenv('MODEL_DEVICE', 'cpu'),
             )
         
         img = img_provider.gen_img(order)

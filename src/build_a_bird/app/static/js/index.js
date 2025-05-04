@@ -221,13 +221,13 @@ function callSendEmailReceipt()
         size = document.getElementById('Large').value.toLowerCase()
     }
 
-    primaryColor = document.getElementById('Primary').value.toLowerCase()
+    primaryColor = document.getElementById('Primary').value.toLowerCase();
 
-    secondaryColor = document.getElementById('Secondary').value.toLowerCase()
+    secondaryColor = document.getElementById('Secondary').value.toLowerCase();
 
-    var name = document.getElementById("Name").value.toLowerCase()
+    var name = document.getElementById("Name").value;
 
-    var email = document.getElementById("Email").value.toLowerCase()
+    var email = document.getElementById("Email").value.toLowerCase();
 
     var data = {sex : gender, species : species, size: size, primary_feather_color : primaryColor, secondary_feather_color: secondaryColor, user_name : name, user_email : email} // input json order data
     console.log(data);
@@ -242,8 +242,30 @@ function callSendEmailReceipt()
  */
 function generateBirdImgCallback() 
 {
-    console.log('hi');
+    if(this.readyState == 4 && this.status == 200)
+        {
+            // server sent response
+            // and our request was successful
 
+            var response = this.response; // get json response data
+
+            var imgData = response.data; // get base64 encoded image data
+
+            var img = document.getElementById("imgData");
+
+            img.setAttribute("src", "data:image/jgp;base64," + imgData);
+    
+            console.log('successfully generated image');
+    
+        }
+        else if(this.readyState == 4 && this.status != 200)
+        {
+            // server sent response
+            // and our request was unsuccessful
+    
+            console.log('failed to generate image');
+    
+        }
 }
 
 /**
@@ -291,7 +313,7 @@ function callGenerateBirdImg()
 
     secondaryColor = document.getElementById('Secondary').value.toLowerCase()
 
-    var name = document.getElementById("Name").value.toLowerCase()
+    var name = document.getElementById("Name").value
 
     var email = document.getElementById("Email").value.toLowerCase()
 

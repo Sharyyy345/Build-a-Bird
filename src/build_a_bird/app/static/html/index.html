@@ -2,10 +2,128 @@
 
 <html>
     <head>
-
+        <title>Build-a-Bird</title>
+        <link href="static/css/styling.css" type="text/css" rel="stylesheet">
+        <script src="static/js/index.js" type="module"></script>
     </head>
 
     <body>
-        <p>Work in progress...</p>
+
+        <div class="box">
+        
+            <div class="title">
+
+                <h1>Build-a-Bird</h1> 
+
+            </div>
+
+
+            <div id="container">
+
+                <div class="card1">
+                    <h4>Gender</h4>
+                    <fieldset>
+
+                        <div class="innerCard1">
+
+                            <input type="radio" name="Gender" value="Male" id="Male" checked/>  Male <br/>
+                        
+                            <input type="radio" name="Gender" value="Female" id="Female" /> Female <br/>
+
+                        </div>
+
+                    </fieldset> 
+
+                </div>
+
+                <div class="card2">
+                    <h4>Species</h4> 
+
+                        <select name="type" id="Species">
+                            <option>Parakeet</option>
+                            <option selected="Conure" >Conure</option>
+                            <option>Cockatoo</option>
+                            <option>Macaw</option>
+                        </select>
+
+                </div>
+
+                <div class="card3">
+                    <h4>Size</h4>
+                    <fieldset>
+
+                        <div class="innerCard3">
+
+                            <input type="radio" name="Size" value="Small" id="Small" checked/>  Small <br/>
+                        
+                            <input type="radio" name="Size" value="Medium" id="Medium" /> Medium <br/>
+
+                            <input type="radio" name="Size" value="Large" id="Large" /> Large <br/>
+
+                        </div>
+
+                    </fieldset> 
+
+                </div>
+
+                <div class="card4">
+                    <h4>Primary Color</h4> 
+
+                        <select name="type" id="Primary">
+                            <optgroup label="Primary Color">
+                                <option>Red</option>
+                                <option selected="Blue" >Blue</option>
+                                <option>Green</option>
+                            </optgroup>
+                        </select>
+
+                </div>
+
+                <div class="card5">
+                    <h4>Secondary Color</h4> 
+
+                        <select name="type" id="Secondary">
+                            <optgroup label="Secondary Color">
+                                <option>Red</option>
+                                <option selected="Blue" >Blue</option>
+                                <option>Green</option>
+                            </optgroup>
+                        </select>
+
+                </div>
+
+            </div>
+
+            <div class="Price">
+
+                <p id="Price">Price: </p>
+
+            </div>
+
+            <div id="container2" >
+
+                <div class="card6">
+                    <h4>Billing Information</h4> 
+
+                    <div class="innerCard6">
+
+                        Name <input type="text" name="Name" id="Name"/>
+
+                        E-Mail <input type="text" name="Email" id="Email" />
+
+                        <button type="button" id="Submit"> Submit <br/>
+
+                    </div>
+
+                </div>
+
+                <div class="card7">
+                    <h4>Preview</h4>
+                </div>
+
+            </div>
+
+        </div>
+
     </body>
 </html>

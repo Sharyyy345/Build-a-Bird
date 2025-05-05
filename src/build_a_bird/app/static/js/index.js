@@ -253,7 +253,7 @@ function generateBirdImgCallback()
 
             var img = document.getElementById("imgData");
 
-            img.setAttribute("src", "data:image/jgp;base64," + imgData);
+            img.setAttribute("src", "data:image/jgp;base64," + imgData); // decodes b64 encoded image data string and displays it
     
             console.log('successfully generated image');
     
